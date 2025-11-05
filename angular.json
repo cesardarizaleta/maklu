@@ -59,6 +59,9 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "historyApiFallback": true
+          },
           "configurations": {
             "production": {
               "buildTarget": "maklu:build:production"
@@ -93,5 +96,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "e69e680a-70f5-4733-b889-1f5b7911f651"
   }
 }

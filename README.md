@@ -1,59 +1,114 @@
-# Maklu
+# Maklu - Sistema de Generación de Tesis Inteligente
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.2.
+Maklu es una aplicación web desarrollada en Angular que permite generar tesis académicas completas de manera automática utilizando inteligencia artificial. El sistema integra con un backend en NestJS que utiliza Gemini AI para crear contenido académico siguiendo estándares APA 7.
 
-## Development server
+## Características
 
-To start a local development server, run:
+- **Autenticación Inteligente**: Sistema de API key para acceso seguro
+- **Generación Automática**: Crea tesis completas (~50 páginas) desde una idea
+- **Panel de Gestión**: Interfaz intuitiva para gestionar todas tus tesis
+- **Edición en Tiempo Real**: Modifica secciones específicas de tus tesis
+- **Estados de Progreso**: Seguimiento en tiempo real del proceso de generación
+- **Diseño Profesional**: Interfaz moderna con tema naranja pastel
+
+## Tecnologías Utilizadas
+
+- **Frontend**: Angular 20 con Signals y Standalone Components
+- **Backend**: NestJS con Gemini AI
+- **Estilos**: CSS moderno con diseño responsive
+- **Arquitectura**: Lazy loading y modularización
+
+## Configuración Inicial
+
+### 1. Instalar Dependencias
+
+```bash
+npm install
+```
+
+### 2. Configurar API Key
+
+La aplicación requiere una API key del backend para funcionar. En desarrollo, puedes obtenerla del backend corriendo en `http://localhost:3000`.
+
+### 3. Ejecutar en Desarrollo
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Navega a `http://localhost:4200` y configura tu API key en la pantalla de autenticación.
 
-## Code scaffolding
+## Configuración de Producción
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Para producción, actualiza `src/environments/environment.prod.ts` con la URL del backend de producción:
 
-```bash
-ng generate component component-name
+```typescript
+export const environment = {
+  production: true,
+  apiUrl: 'https://maklu-backend.onrender.com/api',
+  apiKey: '' // Se configura dinámicamente
+};
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Estructura del Proyecto
 
-```bash
-ng generate --help
+```
+src/
+├── app/
+│   ├── auth/                 # Componente de autenticación
+│   ├── dashboard/            # Panel principal
+│   ├── create-thesis/        # Creación de tesis
+│   ├── thesis-detail/        # Vista de detalle de tesis
+│   ├── services/             # Servicios de API
+│   ├── models/               # Modelos de datos
+│   ├── auth.interceptor.ts   # Interceptor para API key
+│   └── app.routes.ts         # Configuración de rutas
+├── environments/             # Configuración de entornos
+└── styles.css                # Estilos globales
 ```
 
-## Building
+## API Endpoints
 
-To build the project run:
+La aplicación consume los siguientes endpoints del backend:
 
-```bash
-ng build
-```
+- `POST /theses/idea` - Crear tesis desde idea
+- `GET /theses` - Listar tesis del usuario
+- `GET /theses/:id/tree` - Obtener árbol de partes
+- `GET /theses/:id/full` - Obtener tesis completa
+- `PATCH /thesis/:id/:key` - Actualizar parte específica
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Estados de Tesis
 
-## Running unit tests
+- **generating**: En proceso de generación
+- **ready**: Lista para consultar y editar
+- **failed**: Error en generación
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## Desarrollo
 
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+### Generar Componentes
 
 ```bash
-ng e2e
+ng generate component nombre-componente --standalone
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+### Construir para Producción
 
-## Additional Resources
+```bash
+ng build --configuration production
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Contribución
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/nueva-funcionalidad`)
+3. Commit tus cambios (`git commit -am 'Agrega nueva funcionalidad'`)
+4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
+5. Abre un Pull Request
+
+## Licencia
+
+Este proyecto está bajo la Licencia MIT.
+
+## Soporte
+
+Para soporte técnico, contacta al equipo de desarrollo o consulta la documentación del backend.

@@ -1,0 +1,41 @@
+<div class="dashboard">
+  <header class="header">
+    <h1 class="brand">Maklu</h1>
+    <div class="header-actions">
+      <button class="btn-primary" (click)="createNew()">Nueva Tesis</button>
+      <button class="btn-secondary" (click)="logout()">Cerrar Sesión</button>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="container">
+      <h2>Mis Tesis</h2>
+
+      @if (loading()) {
+        <div class="loading">Cargando tesis...</div>
+      } @else if (theses().length === 0) {
+        <div class="empty-state">
+          <h3>No tienes tesis aún</h3>
+          <p>Comienza creando tu primera tesis a partir de una idea.</p>
+          <button class="btn-primary" (click)="createNew()">Crear Primera Tesis</button>
+        </div>
+      } @else {
+        <div class="theses-grid">
+          @for (thesis of theses(); track thesis.id) {
+            <div class="thesis-card" (click)="viewThesis(thesis.id)">
+              <div class="thesis-header">
+                <h3>{{ thesis.title }}</h3>
+                <span class="status" [class]="thesis.status">{{ thesis.status }}</span>
+              </div>
+              <p class="idea">{{ thesis.idea }}</p>
+              <div class="thesis-footer">
+                <span class="discipline">{{ thesis.discipline || 'Sin disciplina' }}</span>
+                <span class="date">{{ thesis.createdAt | date:'short' }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </main>
+</div>

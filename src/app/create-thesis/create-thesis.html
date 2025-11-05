@@ -1,0 +1,59 @@
+<div class="create-container">
+  <header class="header">
+    <button class="back-btn" (click)="goBack()">← Volver</button>
+    <h1>Crear Nueva Tesis</h1>
+  </header>
+
+  <main class="main">
+    <div class="create-form">
+      <div class="input-section">
+        <label for="idea">Describe tu idea de tesis</label>
+        <textarea
+          id="idea"
+          [(ngModel)]="idea"
+          name="idea"
+          placeholder="Ej: Desarrollo de una aplicación móvil para el control de inventarios en pequeñas empresas, utilizando tecnologías de inteligencia artificial para predicción de demanda..."
+          rows="8"
+          maxlength="2000"
+        ></textarea>
+        <div class="char-count">{{ idea().length }}/2000</div>
+      </div>
+
+      <div class="input-section">
+        <label for="discipline">Disciplina (opcional)</label>
+        <input
+          id="discipline"
+          type="text"
+          [(ngModel)]="discipline"
+          name="discipline"
+          placeholder="Ej: Ingeniería de Sistemas, Ciencias de la Computación..."
+        />
+      </div>
+
+      <div class="actions">
+        <button
+          class="generate-btn"
+          (click)="createThesis()"
+          [disabled]="!idea().trim() || generating()"
+        >
+          @if (generating()) {
+            <span class="spinner"></span>
+            Generando tesis...
+          } @else {
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5.26-2c.71-.71.71-1.87 0-2.58-.71-.71-1.87-.71-2.58 0Z"/>
+              <path d="M14 3v4a2 2 0 0 0 2 2h4"/>
+              <path d="M10 12.5 4 17l1.5-6.5L10 12.5Z"/>
+              <path d="M4.24 13.65c-.5-.5-1.5-.5-2 0s-.5 1.5 0 2l2.5 2.5c.5.5 1.5.5 2 0s.5-1.5 0-2l-2.5-2.5Z"/>
+            </svg>
+            Generar Tesis Completa
+          }
+        </button>
+      </div>
+
+      <div class="info">
+        <p>La generación puede tomar varios minutos. Se creará una tesis completa de aproximadamente 50 páginas siguiendo estándares académicos.</p>
+      </div>
+    </div>
+  </main>
+</div>

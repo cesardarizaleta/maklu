@@ -1,0 +1,24 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <h1 class="brand">Maklu</h1>
+    <p class="subtitle">Sistema de Generación de Tesis Inteligente</p>
+
+    <form (ngSubmit)="saveApiKey()" class="auth-form">
+      <div class="input-group">
+        <label for="apiKey">API Key</label>
+        <input
+          id="apiKey"
+          type="password"
+          [(ngModel)]="apiKey"
+          name="apiKey"
+          placeholder="Ingresa tu API Key"
+          required
+        />
+      </div>
+
+      <button type="submit" class="auth-btn" [disabled]="!apiKey().trim()">
+        Acceder al Sistema
+      </button>
+    </form>
+  </div>
+</div>

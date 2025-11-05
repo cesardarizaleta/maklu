@@ -1,0 +1,61 @@
+<div class="thesis-detail">
+  <header class="header">
+    <button class="back-btn" (click)="goBack()">← Volver al Dashboard</button>
+    @if (thesis(); as t) {
+      <h1>{{ t.title }}</h1>
+      <span class="status" [class]="t.status">{{ t.status }}</span>
+    } @else {
+      <h1>Cargando...</h1>
+    }
+  </header>
+
+  <main class="main">
+    @if (loading()) {
+      <div class="loading">Cargando tesis...</div>
+    } @else if (thesis()) {
+      <div class="thesis-content">
+        @if (thesis()!.status === 'generating') {
+          <div class="generating-notice">
+            <div class="spinner"></div>
+            <p>Tu tesis se está generando. Esto puede tomar varios minutos...</p>
+          </div>
+        }
+
+        @for (section of getSections(); track section) {
+          <section class="thesis-section">
+            <h2 class="section-title">{{ getSectionTitle(section) }}</h2>
+
+            @for (part of getPartsBySection()[section]; track part.id) {
+              <div class="part-card">
+                <div class="part-header">
+                  <h3>{{ part.title }}</h3>
+                  <button class="edit-btn" (click)="startEdit(part)">Editar</button>
+                </div>
+
+                @if (editingPart() === part.key) {
+                  <div class="edit-mode">
+                    <textarea
+                      [(ngModel)]="editContent"
+                      rows="10"
+                      placeholder="Contenido de la parte..."
+                    ></textarea>
+                    <div class="edit-actions">
+                      <button class="save-btn" (click)="saveEdit()">Guardar</button>
+                      <button class="cancel-btn" (click)="cancelEdit()">Cancelar</button>
+                    </div>
+                  </div>
+                } @else {
+                  <div class="part-content">
+                    {{ part.content }}
+                  </div>
+                }
+              </div>
+            }
+          </section>
+        }
+      </div>
+    } @else {
+      <div class="error">Error al cargar la tesis</div>
+    }
+  </main>
+</div>
