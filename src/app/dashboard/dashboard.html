@@ -24,8 +24,19 @@
           @for (thesis of theses(); track thesis.id) {
             <div class="thesis-card" (click)="viewThesis(thesis.id)">
               <div class="thesis-header">
-                <h3>{{ thesis.title }}</h3>
-                <span class="status" [class]="thesis.status">{{ thesis.status }}</span>
+                <div class="title-section">
+                  <h3>{{ thesis.title }}</h3>
+                  <span class="status" [class]="thesis.status">{{ thesis.status }}</span>
+                </div>
+                <button class="delete-btn" (click)="confirmDelete(thesis); $event.stopPropagation()" title="Eliminar tesis">
+                  <svg class="delete-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 6h18"/>
+                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                    <line x1="10" y1="11" x2="10" y2="17"/>
+                    <line x1="14" y1="11" x2="14" y2="17"/>
+                  </svg>
+                </button>
               </div>
               <p class="idea">{{ thesis.idea }}</p>
               <div class="thesis-footer">
@@ -38,4 +49,23 @@
       }
     </div>
   </main>
+
+  <!-- Modal de confirmación de eliminación -->
+  @if (showDeleteModal()) {
+    <div class="modal-overlay" (click)="cancelDelete()">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Eliminar Tesis</h3>
+        </div>
+        <div class="modal-body">
+          <p>¿Estás seguro de que quieres eliminar la tesis <strong>"{{ thesisToDelete()?.title }}"</strong>?</p>
+          <p class="warning-text">Esta acción no se puede deshacer.</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="cancelDelete()">Cancelar</button>
+          <button class="btn-danger" (click)="deleteThesis()">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  }
 </div>

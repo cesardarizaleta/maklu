@@ -1,9 +1,11 @@
-import { Component, OnInit, OnDestroy, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, inject, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { isPlatformBrowser } from '@angular/common';
 import { ThesisService } from '../services/thesis.service';
 import { FullThesis, ThesisPart } from '../models/models';
+import { ExportService } from '../services/export';
 
 @Component({
   selector: 'app-thesis-detail',
@@ -18,11 +20,13 @@ export class ThesisDetail implements OnInit, OnDestroy {
   editingPart = signal<string | null>(null);
   editContent = signal('');
   pollingInterval: any;
+  private platformId = inject(PLATFORM_ID);
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private thesisService: ThesisService
+    private thesisService: ThesisService,
+    private exportService: ExportService
   ) {}
 
   ngOnInit() {
@@ -42,9 +46,10 @@ export class ThesisDetail implements OnInit, OnDestroy {
       next: (response) => {
         if (response.success && response.data) {
           this.thesis.set(response.data);
-          // Si está generando, iniciar polling
-          if (response.data.status === 'generating') {
-            this.startPolling();
+          // Si está generando, iniciar polling (solo en navegador)
+          if (response.data.status === 'generating' && isPlatformBrowser(this.platformId)) {
+            // Pequeño delay para permitir que la hidratación se complete
+            setTimeout(() => this.startPolling(), 1000);
           }
         }
         this.loading.set(false);
@@ -124,5 +129,19 @@ export class ThesisDetail implements OnInit, OnDestroy {
       'references': 'Referencias'
     };
     return titles[section] || section.charAt(0).toUpperCase() + section.slice(1);
+  }
+
+  async exportToWord(): Promise<void> {
+    const thesis = this.thesis();
+    if (thesis) {
+      await this.exportService.exportToWord(thesis);
+    }
+  }
+
+  exportToPDF(): void {
+    const thesis = this.thesis();
+    if (thesis) {
+      this.exportService.exportToPDF(thesis);
+    }
   }
 }

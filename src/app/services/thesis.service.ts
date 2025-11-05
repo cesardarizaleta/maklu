@@ -37,4 +37,8 @@ export class ThesisService {
   getThesis(id: string): Observable<ApiResponse<Thesis>> {
     return this.http.get<ApiResponse<Thesis>>(`${environment.apiUrl}/theses/${id}`);
   }
+
+  deleteThesis(id: string): Observable<ApiResponse<void>> {
+    return this.http.delete<ApiResponse<void>>(`${environment.apiUrl}/theses/${id}`);
+  }
 }

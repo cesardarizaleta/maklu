@@ -15,15 +15,17 @@ export class Shell implements OnInit {
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      const apiKey = localStorage.getItem('maklu-api-key');
-      if (apiKey) {
-        this.router.navigate(['/dashboard']);
-      } else {
-        this.router.navigate(['/auth']);
-      }
+      // Pequeño delay para permitir que la hidratación se complete
+      setTimeout(() => {
+        const apiKey = localStorage.getItem('maklu-api-key');
+        if (apiKey) {
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.router.navigate(['/auth']);
+        }
+      }, 100);
     } else {
-      // En SSR, redirigir a auth por defecto
-      this.router.navigate(['/auth']);
+      // En SSR, no hacer navegación - dejar que se renderice la ruta por defecto
     }
   }
 }

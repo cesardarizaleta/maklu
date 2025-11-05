@@ -1,6 +1,7 @@
-import { Component, OnInit, OnDestroy, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
 import { ThesisService } from '../services/thesis.service';
 import { Thesis } from '../models/models';
 
@@ -14,6 +15,9 @@ export class Dashboard implements OnInit, OnDestroy {
   theses = signal<Thesis[]>([]);
   loading = signal(false);
   pollingInterval: any;
+  private platformId = inject(PLATFORM_ID);
+  showDeleteModal = signal(false);
+  thesisToDelete = signal<Thesis | null>(null);
 
   constructor(
     private thesisService: ThesisService,
@@ -22,7 +26,11 @@ export class Dashboard implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadTheses();
-    this.startPolling();
+    // Solo iniciar polling en el navegador, no durante SSR/hidratación
+    if (isPlatformBrowser(this.platformId)) {
+      // Pequeño delay para permitir que la hidratación se complete
+      setTimeout(() => this.startPolling(), 1000);
+    }
   }
 
   ngOnDestroy() {
@@ -66,5 +74,38 @@ export class Dashboard implements OnInit, OnDestroy {
   logout() {
     localStorage.removeItem('maklu-api-key');
     this.router.navigate(['/auth']);
+  }
+
+  confirmDelete(thesis: Thesis) {
+    this.thesisToDelete.set(thesis);
+    this.showDeleteModal.set(true);
+  }
+
+  cancelDelete() {
+    this.thesisToDelete.set(null);
+    this.showDeleteModal.set(false);
+  }
+
+  deleteThesis() {
+    const thesis = this.thesisToDelete();
+    if (!thesis) return;
+
+    this.thesisService.deleteThesis(thesis.id).subscribe({
+      next: (response) => {
+        if (response.success) {
+          // Remover la tesis de la lista local
+          this.theses.set(this.theses().filter(t => t.id !== thesis.id));
+          this.showDeleteModal.set(false);
+          this.thesisToDelete.set(null);
+          alert('Tesis eliminada exitosamente');
+        } else {
+          alert('Error al eliminar tesis: ' + (response.message || 'Error desconocido'));
+        }
+      },
+      error: (error) => {
+        console.error('Error deleting thesis:', error);
+        alert('Error al eliminar tesis. Inténtalo de nuevo.');
+      }
+    });
   }
 }
