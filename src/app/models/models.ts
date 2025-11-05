@@ -46,6 +46,7 @@ export interface FullThesis {
   idea: string;
   discipline?: string;
   status: 'generating' | 'ready' | 'failed';
+  progress?: number;
   createdAt: string;
   updatedAt: string;
   parts: { [key: string]: ThesisPart };

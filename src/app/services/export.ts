@@ -275,7 +275,7 @@ export class ExportService {
         new TextRun({
           text: 'CONTENIDO',
           bold: true,
-          size: 20,
+          size: 12,
           font: 'Times New Roman',
           color: '#000000'
         })
@@ -296,13 +296,14 @@ export class ExportService {
         children: [
           new TextRun({
             text: sectionTitle,
-            size: 16,
+            bold: true,
+            size: 12,
             font: 'Times New Roman',
             color: '#000000'
           }),
           new TextRun({
             text: '\t' + pageNumber,
-            size: 16,
+            size: 12,
             font: 'Times New Roman',
             color: '#000000'
           })
@@ -324,13 +325,13 @@ export class ExportService {
           children: [
             new TextRun({
               text: '  ' + part.title,
-              size: 14,
+              size: 12,
               font: 'Times New Roman',
               color: '#000000'
             }),
             new TextRun({
               text: '\t' + pageNumber,
-              size: 14,
+              size: 12,
               font: 'Times New Roman',
               color: '#000000'
             })
@@ -364,7 +365,7 @@ export class ExportService {
           new TextRun({
             text: sectionTitle.toUpperCase(),
             bold: true,
-            size: 18,
+            size: 12,
             font: 'Times New Roman',
             color: '#000000'
           })
@@ -384,7 +385,7 @@ export class ExportService {
             new TextRun({
               text: part.title,
               bold: true,
-              size: 16,
+              size: 12,
               font: 'Times New Roman',
               color: '#000000'
             })
